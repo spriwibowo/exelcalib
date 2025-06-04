@@ -35,12 +35,6 @@ class MailSpooler {
     private static function getSender() {
 
         $address = [
-            ['host' => 'sisfomedika.com',
-                'username' => 'agent@sisfomedika.com',
-                'password' => 'CFzcPi;8I4f7'],
-            ['host' => 'gen.belongto.my.id',
-                'username' => 'aspak@gen.belongto.my.id',
-                'password' => 'AspakSenderEmail'],
             ['host' => 'smtp.gmail.com',
                 'username' => 'testingemailku2@gmail.com',
                 'password' => '#C0b4t35t']
