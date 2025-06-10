@@ -25,7 +25,7 @@ class User extends ActiveRecord implements IdentityInterface {
      */
     public function rules() {
         return [
-            [['username', 'email', 'full_name'], 'required'],
+            [['username', 'email', 'full_name','tipe'], 'required'],
             ['username', 'trim'],
             [['username', 'email'], 'unique'],
             ['email', 'email'],
@@ -164,8 +164,8 @@ class User extends ActiveRecord implements IdentityInterface {
     public static function ListTipe(){
         return [
             1=>'Administrator',
-            2=>'User A',
-            3=>'User B',
+            2=>'Supervisor',
+            3=>'Teknisi',
         ];
     }
 

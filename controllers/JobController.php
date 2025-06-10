@@ -7,6 +7,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Yii;
 
 /**
  * JobController implements the CRUD actions for JobModel model.
@@ -79,6 +80,11 @@ class JobController extends Controller
     {
         $model = new JobModel();
 
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return \yii\bootstrap5\ActiveForm::validate($model);
+        }
+
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id_job' => $model->id_job]);
@@ -102,6 +108,11 @@ class JobController extends Controller
     public function actionUpdate($id_job)
     {
         $model = $this->findModel($id_job);
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return \yii\bootstrap5\ActiveForm::validate($model);
+        }
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id_job' => $model->id_job]);

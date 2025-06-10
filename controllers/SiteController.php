@@ -139,7 +139,8 @@ class SiteController extends Controller
         $params = Yii::$app->request->get();
         $q = isset($params['q']) ? $params['q'] : '';
         $data = AspakNewAlat::SearchAlat($q);
-        return $data;
+        
+        return ['items' => $data];
     }
 
     // public function actionCreateadmin(){

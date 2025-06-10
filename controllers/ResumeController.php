@@ -7,6 +7,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Yii;
 
 /**
  * ResumeController implements the CRUD actions for ResumeModel model.
@@ -79,6 +80,11 @@ class ResumeController extends Controller
     {
         $model = new ResumeModel();
 
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return \yii\bootstrap5\ActiveForm::validate($model);
+        }
+
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id_resume' => $model->id_resume]);
@@ -102,6 +108,11 @@ class ResumeController extends Controller
     public function actionUpdate($id_resume)
     {
         $model = $this->findModel($id_resume);
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return \yii\bootstrap5\ActiveForm::validate($model);
+        }
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id_resume' => $model->id_resume]);

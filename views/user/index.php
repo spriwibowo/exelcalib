@@ -26,20 +26,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'username',
-            'password_hash',
-            'created_at',
-            'updated_at',
-            //'access_token',
-            //'email:email',
-            //'full_name',
-            //'tipe',
-            //'entity_id',
-            //'faskes',
-            //'reset_token',
-            //'isDeleted',
-            //'expire_at',
+            'email:email',
+            'full_name',
+            [
+                'attribute' => 'tipe',
+                'value' => 'tipe_text',
+                'label' => 'Tipe',
+            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, User $model, $key, $index, $column) {

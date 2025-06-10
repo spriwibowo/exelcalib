@@ -37,9 +37,11 @@ class TemplateModel extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['id_alat', 'file', 'nama','laik_sheet','laik_row'], 'required'],
             [['id_alat', 'nama', 'file', 'extra', 'laik_sheet', 'laik_row', 'ketidakpastian_sheet', 'ketidakpastian_row', 'keterangan'], 'default', 'value' => null],
             [['status'], 'default', 'value' => 1],
             [['id_alat', 'status'], 'integer'],
+            [['file'], 'file', 'skipOnEmpty' => false, 'extensions' => ['xls', 'xlsx'], 'wrongExtension' => 'Hanya file Excel (.xls, .xlsx) yang diizinkan.'],
             [['file', 'extra', 'keterangan'], 'string'],
             [['nama', 'laik_sheet', 'laik_row', 'ketidakpastian_sheet', 'ketidakpastian_row'], 'string', 'max' => 255],
         ];
@@ -52,8 +54,8 @@ class TemplateModel extends \yii\db\ActiveRecord
     {
         return [
             'id_template' => 'Id Template',
-            'id_alat' => 'Id Alat',
-            'nama' => 'Nama',
+            'id_alat' => 'Nama Alat',
+            'nama' => 'Nama Template',
             'file' => 'File',
             'extra' => 'Extra',
             'laik_sheet' => 'Laik Sheet',
