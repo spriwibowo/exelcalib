@@ -26,11 +26,21 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id_template',
-            'id_alat',
+            // 'id_template',
+            // 'id_alat',
+            [
+                'attribute' => 'id_alat',
+                'value' => 'alat_text',
+                'label' => 'Nama Alat',
+            ],
             'nama',
             'file:ntext',
-            'extra:ntext',
+            [
+                'attribute' => 'status',
+                'value' => 'status_text',
+                'label' => 'Status',
+            ],
+            // 'extra:ntext',
             //'laik_sheet',
             //'laik_row',
             //'ketidakpastian_sheet',

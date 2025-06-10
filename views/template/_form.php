@@ -3,8 +3,25 @@
 use yii\bootstrap5\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use app\models\duplicate\AspakNewAlat;
+use app\models\TemplateModel;
+
+// ...
+$alatText = ''; // default
+if ($model->id_alat) {
+    $alat = AspakNewAlat::findOne($model->id_alat);
+    if ($alat) {
+        $alatText = $alat->alat_code . ' - ' . $alat->alat_name;
+        $alatText = Html::encode($alatText);
+    }
+    
+}
+
 
 ?>
+
+    
+
 
 <style>
     .select2-selection--single.form-control {
@@ -39,20 +56,31 @@ use yii\helpers\Url;
 
     <?= $form->field($model, 'nama')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'file')->fileInput([
+    <?= $form->field($model, 'uploadfile')->fileInput([
         'accept' => '.xls,.xlsx',
         'id' => 'file-excel'
-    ]) ?>
+    ])->label('File Excel' . (!$model->isNewRecord && $model->file ? ' (biarkan kosong jika tidak diganti)' : '')) ?>
+
+    <?php if (!$model->isNewRecord && $model->file): ?>
+        <div class="form-group row">
+            <div class="offset-sm-3 col-sm-6">
+                <p class="form-text">
+                    File saat ini: 
+                    <a href="<?= Url::to('@web/' . $model->file, true) ?>" target="_blank">
+                        <?= basename($model->file) ?>
+                    </a>
+                </p>
+            </div>
+        </div>
+    <?php endif; ?>
+
 
     <?= $form->field($model, 'laik_sheet')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'laik_row')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'ketidakpastian_sheet')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'ketidakpastian_row')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'status')->dropDownList([
-        1 => 'Active',
-        0 => 'Tidak',
-    ], ['prompt' => 'Pilih Status']) ?>
+    <?= $form->field($model, 'status')->dropDownList(
+        TemplateModel::ListStatus(), 
+        ['prompt' => 'Pilih Status']) ?>
 
     <?= $form->field($model, 'keterangan')->textarea(['rows' => 6]) ?>
 
@@ -117,6 +145,7 @@ $('#id_alat').select2({
 $('#id_alat').next('.select2-container').find('.select2-selection--single').addClass('form-control');
 
 
+
 $('#file-excel').on('change', function() {
     var allowedExtensions = /(\.xls|\.xlsx)$/i;
     var filePath = $(this).val();
@@ -128,5 +157,16 @@ $('#file-excel').on('change', function() {
 JS;
 $this->registerJs($js);
 ?>
+
+<?php if ($model->id_alat && !empty($alatText)): ?>
+    <?php
+    $jsSelected = <<<JS
+    let selectedOption = new Option("{$alatText}", "{$model->id_alat}", true, true);
+    $('#id_alat').append(selectedOption).trigger('change');
+    JS;
+    $this->registerJs($jsSelected);
+    ?>
+<?php endif; ?>
+
 
 
