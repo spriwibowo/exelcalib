@@ -128,7 +128,7 @@ class TemplateController extends Controller
                 }
 
                 if ($model->save(false)) {
-                    return $this->redirect(['view', 'id' => $model->id_template]);
+                    return $this->redirect(['view', 'id_template' => $model->id_template]);
                 }
             }
         } else {
