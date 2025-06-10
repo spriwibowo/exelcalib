@@ -264,7 +264,10 @@ $this->beginPage();
         </div>
         <a href="<?= Url::to(['/site/index']) ?>"><i class="fas fa-home me-2"></i> <span class="sidebar-text">Dashboard</span></a>
         <a href="<?= Url::to(['/user/index']) ?>"><i class="fas fa-users me-2"></i> <span class="sidebar-text">Users</span></a>
-        <a href="<?= Url::to(['/settings/index']) ?>"><i class="fas fa-cogs me-2"></i> <span class="sidebar-text">Settings</span></a>
+        <a href="<?= Url::to(['/template/index']) ?>"><i class="fas fa-book me-2"></i> <span class="sidebar-text">Template MK</span></a>
+        <a href="<?= Url::to(['/resume/index']) ?>"><i class="fas fa-file me-2"></i> <span class="sidebar-text">Resume Kegiatan</span></a>
+        <a href="<?= Url::to(['/job/index']) ?>"><i class="fas fa-clipboard me-2"></i> <span class="sidebar-text">Kegiatan Kalibrasi</span></a>
+        <!-- <a href="<?// Url::to(['/settings/index']) ?>"><i class="fas fa-cogs me-2"></i> <span class="sidebar-text">Settings</span></a> -->
     </div>
 
     <!-- Content -->
