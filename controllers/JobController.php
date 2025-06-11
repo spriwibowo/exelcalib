@@ -147,14 +147,13 @@ class JobController extends Controller
             }
 
             if ($model->validate()) {
-                if ($uploadedFile) {
                     $result = $model->newsave($uploadedFile);
                     if($result['status']){
                         return $this->redirect(['view', 'id_job' => $model->id_job]);
                     }else{
                         Yii::$app->session->setFlash('error', $result['message']);
                     }
-                }
+                
             }else{
                 
             }

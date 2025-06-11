@@ -95,7 +95,7 @@ class JobModel extends \yii\db\ActiveRecord
     public function preload($model){
 
         if($model){
-            $this->attributess = $model->attributess;
+            $this->attributes = $model->attributes;
         }
 
         if(empty($this->id_user)){
@@ -124,19 +124,27 @@ class JobModel extends \yii\db\ActiveRecord
             return $result;
         } 
 
+        if(!empty($uploadedFile)){
+            $fileName = uniqid('job_') . '.' . $uploadedFile->extension;
+            $relativePath = 'uploads/jobs/' . $fileName;
+            $fullPath = Yii::getAlias('@webroot/' . $relativePath);
 
-        $fileName = uniqid('job_') . '.' . $uploadedFile->extension;
-        $relativePath = 'uploads/jobs/' . $fileName;
-        $fullPath = Yii::getAlias('@webroot/' . $relativePath);
+            if (!is_dir(dirname($fullPath))) {
+                mkdir(dirname($fullPath), 0775, true);
+            }
 
-        if (!is_dir(dirname($fullPath))) {
-            mkdir(dirname($fullPath), 0775, true);
+            if ($uploadedFile->saveAs($fullPath)) {
+                $this->file = $relativePath;
+            }else {
+                $result['message'] = 'Gagal menyimpan file.';
+                return $result;
+            }
         }
 
-        if ($uploadedFile->saveAs($fullPath)) {
-            $this->file = $relativePath;
+        $fullPathExcel = Yii::getAlias('@webroot/' . $this->file);
+            
             try {
-                $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($fullPath);
+                $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($fullPathExcel);
                 $sheet = $spreadsheet->getSheetByName($template->laik_sheet);
                 if ($sheet) {
                     $value = $sheet->getCell($template->laik_row)->getCalculatedValue();
@@ -156,10 +164,7 @@ class JobModel extends \yii\db\ActiveRecord
                 $result['message'] = "Gagal membaca file Excel: " . $e->getMessage();
                 return $result;
             }
-        } else {
-            $result['message'] = 'Gagal menyimpan file.';
-            return $result;
-        }
+        
         
 
         if(!empty($this->tgl_kalibrasi)){

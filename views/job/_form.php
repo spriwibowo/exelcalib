@@ -55,27 +55,27 @@ if($model->id_template){
         ],
     ]); ?>
 
+    <?= $form->field($model, 'no_po')->textInput(['maxlength' => true, 'readonly' => !empty($model->id_resume)]) ?>
+
+    <?= $form->field($model, 'nama_po')->textInput(['maxlength' => true, 'readonly' => !empty($model->id_resume)]) ?>
+
+    <?= $form->field($model, 'tanggal_po')->widget(DatePicker::class, [
+        'dateFormat' => 'dd-MM-yyyy',
+        'options' => ['class' => 'form-control','disabled' => !empty($model->id_resume)],
+    ]) ?>
+
     <?= $form->field($model, 'id_alat')->dropDownList([], [
         'id' => 'id_alat',
-        'prompt' => 'Pilih Alat...'
+        'prompt' => 'Pilih Alat...',
+        'disabled' => (!$model->isNewRecord || ($model->isNewRecord && !empty($model->id_resume))) 
+        // akan disable jika bukan record baru dan dari resume
     ]) ?>
+
 
     <?= $form->field($model, 'id_template')->dropDownList([], [
         'id' => 'id_template',
         'prompt' => 'Pilih Template...'
     ]) ?>
-
-    <?php if(empty($model->id_resume)):?>   
-    <?= $form->field($model, 'no_po')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'nama_po')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'tanggal_po')->widget(DatePicker::class, [
-        'dateFormat' => 'dd-MM-yyyy',
-        'options' => ['class' => 'form-control'],
-    ]) ?>
-
-    <?php endif;?>
 
 
     <?= $form->field($model, 'serial')->textInput(['maxlength' => true]) ?>

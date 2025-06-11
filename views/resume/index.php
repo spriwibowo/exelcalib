@@ -40,10 +40,24 @@ $this->params['breadcrumbs'][] = $this->title;
             //'id_po',
             [
                 'class' => ActionColumn::className(),
+                'template' => '{kalibrasi} {view} {update} {delete} ', // tambahkan nama action di template
                 'urlCreator' => function ($action, ResumeModel $model, $key, $index, $column) {
+                    if ($action === 'kalibrasi') {
+                        return Url::toRoute(['job/create', 'id' => $model->id_resume]);
+                    }
                     return Url::toRoute([$action, 'id_resume' => $model->id_resume]);
-                 }
-            ],
+                },
+                'buttons' => [
+                    'kalibrasi' => function ($url, $model, $key) {
+                        return Html::a('<i class="fa fa-plus"></i>', $url, [
+                            'title' => 'Tambah Kegiatan Kalibrasi',
+                            'data-pjax' => '0',
+                            'class' => 'btn btn-primary btn-sm'
+                        ]);
+                    },
+                ],
+            ]
+            ,
         ],
     ]); ?>
 
