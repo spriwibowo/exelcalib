@@ -189,7 +189,7 @@ class JobModel extends \yii\db\ActiveRecord
                     return $result;
                 }
             } catch (\Throwable $e) {
-                $result['message'] = "Gagal membaca file Excel: " . $e->getMessage();
+                $result['message'] = "Gagal membaca file Excel: " . $e->getMessage() .' <br/>File Excel tidak boleh diproteksi dengan password.';
                 return $result;
             }
         

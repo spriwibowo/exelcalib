@@ -31,6 +31,14 @@ $this->beginPage();
     $this->registerJsFile("https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js", ['depends' => [\yii\web\JqueryAsset::class]]);
     ?>
 
+    <?php
+    $this->registerJsFile(
+        'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js',
+        ['depends' => [\yii\web\JqueryAsset::class]]
+    );
+    ?>
+
+
     <style>
         .select2-selection--single.form-control {
             height: calc(2.5rem + 2px); /* sesuaikan dengan input height kamu */

@@ -88,6 +88,7 @@ class TemplateController extends Controller
         }
 
         if (Yii::$app->request->isPost) {
+            
             $model->load(Yii::$app->request->post());
             $uploadedFile = UploadedFile::getInstance($model, 'uploadfile');
 
@@ -97,6 +98,7 @@ class TemplateController extends Controller
             }
 
             if ($model->validate()) {
+                $valid_file = false;
                 if ($uploadedFile) {
                     $fileName = uniqid('template_') . '.' . $uploadedFile->extension;
                     $relativePath = 'uploads/templates/' . $fileName;
@@ -116,18 +118,19 @@ class TemplateController extends Controller
                             if ($sheet) {
                                 $value = $sheet->getCell($model->laik_row)->getValue();
                                 Yii::$app->session->setFlash('success', "Data berhasil disimpan. Nilai dari Excel: {$value}");
+                                $valid_file = true;
                             } else {
                                 Yii::$app->session->setFlash('warning', "Sheet '{$model->laik_sheet}' tidak ditemukan.");
                             }
                         } catch (\Throwable $e) {
-                            Yii::$app->session->setFlash('error', "Gagal membaca file Excel: " . $e->getMessage());
+                            Yii::$app->session->setFlash('error', "Gagal membaca file Excel: " . $e->getMessage().' <br/>File Excel tidak boleh diproteksi dengan password.');
                         }
                     } else {
                         Yii::$app->session->setFlash('error', "Gagal menyimpan file.");
                     }
                 }
 
-                if ($model->save(false)) {
+                if ($valid_file && $model->save(false)) {
                     return $this->redirect(['view', 'id_template' => $model->id_template]);
                 }
             }
@@ -163,6 +166,7 @@ class TemplateController extends Controller
             $uploadedFile = UploadedFile::getInstance($model, 'uploadfile');
 
             if ($uploadedFile) {
+                $valid_file = false;
                 $fileName = uniqid('template_') . '.' . $uploadedFile->extension;
                 $relativePath = 'uploads/templates/' . $fileName;
                 $fullPath = Yii::getAlias('@webroot/' . $relativePath);
@@ -181,21 +185,24 @@ class TemplateController extends Controller
                         if ($sheet) {
                             $value = $sheet->getCell($model->laik_row)->getValue();
                             Yii::$app->session->setFlash('success', "File berhasil diganti. Nilai dari Excel: {$value}");
+                            $valid_file = true;
                         } else {
                             Yii::$app->session->setFlash('warning', "Sheet '{$model->laik_sheet}' tidak ditemukan.");
                         }
                     } catch (\Throwable $e) {
-                        Yii::$app->session->setFlash('error', "Gagal membaca file Excel: " . $e->getMessage());
+                        Yii::$app->session->setFlash('error', "Gagal membaca file Excel: " . $e->getMessage().' <br/>File Excel tidak boleh diproteksi dengan password.');
                     }
                 } else {
                     Yii::$app->session->setFlash('error', "Gagal menyimpan file.");
                 }
             } else {
+
                 // Tidak ada file baru diupload, gunakan yang lama
+                $valid_file = true;
                 $model->file = $oldFilePath;
             }
 
-            if ($model->save(false)) {
+            if ($valid_file && $model->save(false)) {
                 return $this->redirect(['view', 'id_template' => $model->id_template]);
             }
         }
