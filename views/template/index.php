@@ -34,7 +34,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Nama Alat',
             ],
             'nama',
-            'file:ntext',
+            [
+                'attribute' => 'file',
+                'label' => 'File',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return Html::a(
+                        basename($model->file),
+                        Url::to("@web/" . $model->file, true),
+                        ['target' => '_blank']
+                    );
+                },
+            ],
             [
                 'attribute' => 'status',
                 'value' => 'status_text',
