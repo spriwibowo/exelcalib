@@ -235,4 +235,24 @@ class TemplateController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionSearchalat() {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $params = Yii::$app->request->get();
+        $q = isset($params['q']) ? $params['q'] : '';
+        $data = TemplateModel::SearchAlat($q);
+        
+        return ['items' => $data];
+    }
+
+    public function actionSearchtemplate() {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $params = Yii::$app->request->get();
+        $id_alat = isset($params['id_alat']) ? $params['id_alat'] : '';
+        $data = TemplateModel::SearchTemplate($id_alat);
+        
+        return ['items' => $data];
+    }
 }

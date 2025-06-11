@@ -98,4 +98,71 @@ class TemplateModel extends \yii\db\ActiveRecord
         return isset($list[$this->status])?$list[$this->status]:'-';
     }
 
+    public static function SearchAlat($q = '',$all=0) {
+        $data = array();
+        $limit = 100;
+        $query = self::find();
+        $query->from(self::tableName() . ' t')
+                ->joinWith(['alat.parent.grandparent.kelompok']);
+
+        if (!empty($q)) {
+            $keyword = trim($q);
+            $query->andWhere("alat.alat_name LIKE '%{$keyword}%' or alat.alat_code LIKE '%{$keyword}%' or alat.sinonim LIKE '%{$keyword}%'");
+        }
+
+        if(!$all){
+            $query->andWhere(['t.status'=>1]);
+        }
+
+        $query->groupBy(['t.id_alat']);
+
+        $result = $query->orderBy('alat.alat_name', 'asc')
+                ->limit($limit)
+                ->all();
+
+        foreach ($result as $item) {
+            $alat = $item->alat;
+            $data[] = array(
+                'id' => $alat->id_alat,
+                'name' => $alat->alat_name,
+                'code' => (empty($alat->childs))?strval($alat->alat_code):'',
+                'sinonim' => $alat->sinonim,
+                'id_parent' => $alat->parent_id,
+                'desc' => $alat->alat_ket,
+                'keterangan' => !empty($alat->parent) ? $alat->parent->alat_name:'-',
+                'link'=>(count($alat->childs) > 0) ? Url::to(['payload/subalat', 'id_parent' => $alat->id_alat, 'param' => 1]) : '-'
+            );
+        }
+
+        return $data;
+    }
+
+    public static function SearchTemplate($id_alat=0) {
+
+        $data = array();
+        if(!empty($id_alat)){
+
+            $limit = 100;
+            $query = self::find();
+            $query->from(self::tableName() . ' t')
+                    ->joinWith(['alat']);
+
+            $query->andWhere(['t.status'=>1,'t.id_alat'=>$id_alat]);
+
+            $result = $query->orderBy('t.nama', 'asc')
+                    ->limit($limit)
+                    ->all();
+
+            foreach ($result as $item) {
+                $data[] = array(
+                    'id' => $item->id_template,
+                    'name' => $item->nama,
+                    'keterangan' => $item->keterangan
+                );
+            }
+        }
+        
+        return $data;
+    }
+
 }

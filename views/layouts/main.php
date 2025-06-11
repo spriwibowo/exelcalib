@@ -31,6 +31,14 @@ $this->beginPage();
     $this->registerJsFile("https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js", ['depends' => [\yii\web\JqueryAsset::class]]);
     ?>
 
+    <style>
+        .select2-selection--single.form-control {
+            height: calc(2.5rem + 2px); /* sesuaikan dengan input height kamu */
+            padding: 0.375rem 0.75rem;
+            line-height: 1.5;
+        }
+
+    </style>
 
     <style>
         body {
@@ -311,6 +319,15 @@ $this->beginPage();
 
         <!-- Main Content -->
         <div class="main-content">
+        <?php foreach (Yii::$app->session->getAllFlashes() as $type => $message): ?>
+            <div class="alert alert-<?= $type === 'error' ? 'danger' : $type ?> alert-dismissible fade show" role="alert">
+                <?= $message ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endforeach; ?>
+
+
+                
             <?= $content ?>
         </div>
     </div>

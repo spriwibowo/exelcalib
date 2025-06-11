@@ -3,10 +3,12 @@
 namespace app\controllers;
 
 use app\models\JobModel;
+use app\models\ResumeModel;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 use Yii;
 
 /**
@@ -76,9 +78,12 @@ class JobController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate()
+    public function actionCreate($id=0)
     {
+
+        $resume = ResumeModel::findOne(['id_resume' => $id]);
         $model = new JobModel();
+        $model->preload($resume);
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -86,8 +91,24 @@ class JobController extends Controller
         }
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id_job' => $model->id_job]);
+
+            $model->load(Yii::$app->request->post());
+            $uploadedFile = UploadedFile::getInstance($model, 'uploadfile');
+
+            // Cek validasi wajib file hanya saat create
+            if ($model->isNewRecord && empty($uploadedFile)) {
+                $model->addError('uploadfile', 'File wajib diunggah.');
+            }
+
+            if ($model->validate()) {
+                if ($uploadedFile) {
+                    $result = $model->newsave($uploadedFile);
+                    if($result['status']){
+                        return $this->redirect(['view', 'id_job' => $model->id_job]);
+                    }else{
+                        Yii::$app->session->setFlash('error', $result['message']);
+                    }
+                }
             }
         } else {
             $model->loadDefaultValues();
@@ -108,15 +129,36 @@ class JobController extends Controller
     public function actionUpdate($id_job)
     {
         $model = $this->findModel($id_job);
+        $oldFilePath = $model->file; // simpan path lama
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             return \yii\bootstrap5\ActiveForm::validate($model);
         }
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id_job' => $model->id_job]);
-        }
+        if ($this->request->isPost) {
+
+            $model->load(Yii::$app->request->post());
+            $uploadedFile = UploadedFile::getInstance($model, 'uploadfile');
+
+            // Cek validasi wajib file hanya saat create
+            if ($model->isNewRecord && empty($uploadedFile)) {
+                $model->addError('uploadfile', 'File wajib diunggah.');
+            }
+
+            if ($model->validate()) {
+                if ($uploadedFile) {
+                    $result = $model->newsave($uploadedFile);
+                    if($result['status']){
+                        return $this->redirect(['view', 'id_job' => $model->id_job]);
+                    }else{
+                        Yii::$app->session->setFlash('error', $result['message']);
+                    }
+                }
+            }else{
+                
+            }
+        } 
 
         return $this->render('update', [
             'model' => $model,

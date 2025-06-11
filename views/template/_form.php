@@ -20,17 +20,7 @@ if ($model->id_alat) {
 
 ?>
 
-    
 
-
-<style>
-    .select2-selection--single.form-control {
-        height: calc(2.5rem + 2px); /* sesuaikan dengan input height kamu */
-        padding: 0.375rem 0.75rem;
-        line-height: 1.5;
-    }
-
-</style>
 <div class="template-model-form">
 
     <?php $form = ActiveForm::begin([
