@@ -3,8 +3,10 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\assets\AppAssetLocal;
 
 AppAsset::register($this);
+AppAssetLocal::register($this);
 
 $this->beginPage();
 ?>
@@ -14,30 +16,9 @@ $this->beginPage();
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= Html::encode($this->title) ?></title>
+    <link rel="icon" href="<?= Yii::getAlias('@web') ?>/favicon.ico" type="image/x-icon">
+
     <?php $this->head() ?>
-
-    <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Font Awesome 6 -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    
-    <!-- Select2 -->
-    <?php
-    $this->registerCssFile("https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css");
-    $this->registerJsFile("https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js", ['depends' => [\yii\web\JqueryAsset::class]]);
-    ?>
-
-    <?php
-    $this->registerJsFile(
-        'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js',
-        ['depends' => [\yii\web\JqueryAsset::class]]
-    );
-    ?>
-
 
     <style>
         .select2-selection--single.form-control {
@@ -142,12 +123,6 @@ $this->beginPage();
         }
 
     </style>
-
-    <script>
-        // Set tema dari localStorage saat page load
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-    </script>
 
     <style>
         :root[data-theme="dark"] {
@@ -342,6 +317,17 @@ $this->beginPage();
 </div>
 
 
+
+
+
+
+<?php $this->endBody() ?>
+
+<script>
+        // Set tema dari localStorage saat page load
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
 <script>
 $(document).ready(function () {
     // Theme toggle
@@ -370,9 +356,6 @@ $(document).ready(function () {
 });
 </script>
 
-
-
-<?php $this->endBody() ?>
 </body>
 </html>
 <?php $this->endPage() ?>
