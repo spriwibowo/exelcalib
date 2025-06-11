@@ -10,7 +10,7 @@ class AppAssetLocal extends AssetBundle
     public $baseUrl = '@web/vendor-assets';
 
     public $css = [
-        'bootstrap/css/bootstrap.min.css',
+        // 'bootstrap/css/bootstrap.min.css',
         'fontawesome/css/all.min.css',
         'select2/css/select2.min.css',
     ];
