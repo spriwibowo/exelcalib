@@ -86,11 +86,16 @@ class ResumeController extends Controller
         }
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id_resume' => $model->id_resume]);
+            if ($model->load($this->request->post())){
+                $model->tanggal_po = date('Y-m-d',strtotime($model->tanggal_po));
+                if($model->save()) {
+                    return $this->redirect(['view', 'id_resume' => $model->id_resume]);
+                }
             }
         } else {
             $model->loadDefaultValues();
+            $model->jumlah = 1;
+            $model->tanggal_po = date('Y-m-d');
         }
 
         return $this->render('create', [

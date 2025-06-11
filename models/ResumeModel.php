@@ -39,6 +39,7 @@ class ResumeModel extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['id_alat', 'no_po','nama_po','tanggal_po'], 'required'],
             [['id_alat', 'no_po', 'nama_po', 'tanggal_po', 'jumlah_tidak', 'extra', 'id_po'], 'default', 'value' => null],
             [['jumlah_laik'], 'default', 'value' => 0],
             [['id_alat', 'jumlah', 'jumlah_progress', 'jumlah_finish', 'jumlah_laik', 'jumlah_tidak', 'id_po'], 'integer'],
@@ -54,7 +55,7 @@ class ResumeModel extends \yii\db\ActiveRecord
     {
         return [
             'id_resume' => 'Id Resume',
-            'id_alat' => 'Id Alat',
+            'id_alat' => 'Nama Alat',
             'no_po' => 'No Po',
             'nama_po' => 'Nama Po',
             'tanggal_po' => 'Tanggal Po',
