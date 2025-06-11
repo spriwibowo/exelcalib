@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\models\duplicate\AspakNewAlat;
 
 /**
  * This is the model class for table "resume".
@@ -65,6 +66,22 @@ class ResumeModel extends \yii\db\ActiveRecord
             'extra' => 'Extra',
             'id_po' => 'Id Po',
         ];
+    }
+
+    public function getAlat() {
+        return $this->hasOne(AspakNewAlat::class, ['id_alat' => 'id_alat'])
+                        ->from(AspakNewAlat::tableName() . ' alat');
+    }
+
+    public function getAlat_text(){
+        if($this->alat){
+            return $this->alat->alat_code.' - '.$this->alat->alat_name;
+        }
+        return '-';
+    }
+
+    public function getJobs() {
+        return $this->hasMany(JobModel::class, ['id_resume' => 'id_resume']);
     }
 
 }

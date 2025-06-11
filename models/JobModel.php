@@ -4,6 +4,7 @@ namespace app\models;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 use Yii;
+use app\models\duplicate\AspakNewAlat;
 
 /**
  * This is the model class for table "job".
@@ -89,6 +90,33 @@ class JobModel extends \yii\db\ActiveRecord
             'tipe' => 'Tipe',
             'id_resume' => 'Id Resume',
         ];
+    }
+
+    public function getAlat() {
+        return $this->hasOne(AspakNewAlat::class, ['id_alat' => 'id_alat'])
+                        ->from(AspakNewAlat::tableName() . ' alat');
+    }
+
+    public function getAlat_text(){
+        if($this->alat){
+            return $this->alat->alat_code.' - '.$this->alat->alat_name;
+        }
+        return '-';
+    }
+    public function getTemplate() {
+        return $this->hasOne(TemplateModel::class, ['id_template' => 'id_template'])
+                        ->from(TemplateModel::tableName() . ' template');
+    }
+
+    public function getTemplate_text(){
+        if($this->template){
+            return $this->template->nama;
+        }
+        return '-';
+    }
+    public function getResume() {
+        return $this->hasOne(ResumeModel::class, ['id_resume' => 'id_resume'])
+                        ->from(ResumeModel::tableName() . ' resume');
     }
 
 

@@ -25,14 +25,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id_resume',
-            'id_alat',
+            [
+                'attribute' => 'id_alat',
+                'value' => 'alat_text',
+                'label' => 'Nama Alat',
+            ],
             'no_po',
             'nama_po',
             'tanggal_po',
-            //'jumlah',
-            //'jumlah_progress',
+            'jumlah',
+            'jumlah_progress',
             //'jumlah_finish',
             //'jumlah_laik',
             //'jumlah_tidak',
