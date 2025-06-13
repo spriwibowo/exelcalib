@@ -1,6 +1,6 @@
 <?php
 
-return [
+$dbconf = [
     'class' => 'yii\db\Connection',
     'dsn' => 'mysql:host=localhost;dbname=exelcalib',
     'username' => 'root',
@@ -12,3 +12,8 @@ return [
     //'schemaCacheDuration' => 60,
     //'schemaCache' => 'cache',
 ];
+
+if(file_exists(__DIR__ . '/db.overwrite.php')) 
+	include(__DIR__ . '/db.overwrite.php');
+	
+return $dbconf;
