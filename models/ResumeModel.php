@@ -39,12 +39,15 @@ class ResumeModel extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_alat', 'no_po','nama_po','tanggal_po'], 'required'],
+            [['no_po','id_alat','nama_po','tanggal_po'], 'required'],
             [['id_alat', 'no_po', 'nama_po', 'tanggal_po', 'jumlah_tidak', 'extra', 'id_po'], 'default', 'value' => null],
             [['jumlah_laik'], 'default', 'value' => 0],
             [['id_alat', 'jumlah', 'jumlah_progress', 'jumlah_finish', 'jumlah_laik', 'jumlah_tidak', 'id_po'], 'integer'],
             [['extra'], 'string'],
             [['no_po', 'nama_po', 'tanggal_po'], 'string', 'max' => 255],
+            
+             // Rule untuk kombinasi unik
+            [['no_po', 'nama_po', 'id_alat'], 'unique', 'targetAttribute' => ['no_po', 'nama_po', 'id_alat'], 'message' => 'Kombinasi No. PO, Nama PO, dan Alat sudah ada.'],
         ];
     }
 
