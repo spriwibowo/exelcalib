@@ -32,7 +32,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'no_po',
             'nama_po',
-            'tanggal_po',
+            [
+                'attribute' => 'tanggal_po',
+                'format' => ['date', 'php:d-m-Y'],
+            ],
             'jumlah',
             'jumlah_progress',
             //'jumlah_finish',

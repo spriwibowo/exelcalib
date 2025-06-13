@@ -42,7 +42,10 @@ $this->params['breadcrumbs'][] = $this->title;
             //'tanggal_po',
             //'id_user',
             //'id_jadwal',
-            'tgl_kalibrasi',
+            [
+                'attribute' => 'tgl_kalibrasi',
+                'format' => ['date', 'php:d-m-Y'],
+            ],
             //'extra:ntext',
             //'id_po',
             //'file:ntext',

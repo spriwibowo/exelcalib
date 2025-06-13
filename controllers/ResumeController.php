@@ -89,7 +89,7 @@ class ResumeController extends Controller
             if ($model->load($this->request->post())){
                 $model->tanggal_po = date('Y-m-d',strtotime($model->tanggal_po));
                 if($model->save()) {
-                    return $this->redirect(['view', 'id_resume' => $model->id_resume]);
+                    return $this->redirect(['index']);
                 }
             }
         } else {
@@ -119,8 +119,13 @@ class ResumeController extends Controller
             return \yii\bootstrap5\ActiveForm::validate($model);
         }
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id_resume' => $model->id_resume]);
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post())){
+                $model->tanggal_po = date('Y-m-d',strtotime($model->tanggal_po));
+                if($model->save()) {
+                    return $this->redirect(['index']);
+                }
+            }
         }
 
         return $this->render('update', [

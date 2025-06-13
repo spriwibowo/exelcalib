@@ -188,6 +188,24 @@ class HelperData {
         }
         return $tipe;
     }
+
+    public static function IsExcelFile($uploadedFile){
+        // Cek ekstensi dan MIME type
+        $allowedExtensions = ['xls', 'xlsx'];
+        $allowedMimeTypes = [
+            'application/vnd.ms-excel',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ];
+
+        $fileExtension = strtolower($uploadedFile->extension);
+        $fileMimeType = $uploadedFile->type;
+
+        if (in_array($fileExtension, $allowedExtensions) && in_array($fileMimeType, $allowedMimeTypes)) {
+            return true;
+        }
+
+        return false;
+    }
     
 //    public function getDashboardQuePreffix() {
 //        $preffix = array(

@@ -5,6 +5,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 
 use Yii;
 use app\models\duplicate\AspakNewAlat;
+use app\models\helper\HelperData;
 
 /**
  * This is the model class for table "job".
@@ -119,6 +120,14 @@ class JobModel extends \yii\db\ActiveRecord
                         ->from(ResumeModel::tableName() . ' resume');
     }
 
+    public function getExtra_data(){
+        $extra = json_decode($this->extra,true);
+        if(empty($extra)){
+            $extra = array();
+        }
+        return $extra;
+    }
+
 
     public function preload($model){
 
@@ -153,6 +162,13 @@ class JobModel extends \yii\db\ActiveRecord
         } 
 
         if(!empty($uploadedFile)){
+
+            $isExcel = HelperData::IsExcelFile($uploadedFile);
+            if(!$isExcel){
+                $result['message'] = 'Format File Tidak Sesuai';
+                return $result;
+            }
+
             $fileName = uniqid('job_') . '.' . $uploadedFile->extension;
             $relativePath = 'uploads/jobs/' . $fileName;
             $fullPath = Yii::getAlias('@webroot/' . $relativePath);
@@ -169,6 +185,11 @@ class JobModel extends \yii\db\ActiveRecord
             }
         }
 
+        if(empty($this->file)){
+            $result['message'] = 'File Excel Tidak Terdeteksi.';
+            return $result;
+        }
+
         $fullPathExcel = Yii::getAlias('@webroot/' . $this->file);
             
             try {
@@ -183,6 +204,12 @@ class JobModel extends \yii\db\ActiveRecord
                     }else{
                         $this->stt_laik = 0;
                     }
+
+                    $extra = $this->extra_data;
+                    $extra['laik_sheet'] = $template->laik_sheet;
+                    $extra['laik_row'] = $template->laik_row;
+                    $this->extra = json_encode($extra);
+
 
                 } else {
                     $result['message'] = "Sheet '{$template->laik_sheet}' tidak ditemukan.";
