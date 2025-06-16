@@ -30,9 +30,10 @@ class User extends ActiveRecord implements IdentityInterface {
             [['username', 'email'], 'unique'],
             ['email', 'email'],
             ['username', 'string', 'min' => 2, 'max' => 255],
-            ['password', 'string', 'min' => 4],
+            ['password', 'string', 'min' => 6],
             ['password', 'required', 'on' => 'create'],
             ['password', 'safe', 'on' => 'update'], // password tidak wajib saat update
+            ['password', 'validatePasswordList'],
             [['full_name', 'access_token', 'password', 'password_hash', 'reset_token'], 'string'],
             [['tipe', 'entity_id', 'faskes', 'isDeleted','expire_at'], 'integer']
         ];
@@ -60,6 +61,14 @@ class User extends ActiveRecord implements IdentityInterface {
         }
 
         return parent::beforeSave($insert);
+    }
+
+    // Validasi kustom
+    public function validatePasswordList($attribute, $params)
+    {
+        if (in_array($this->$attribute, \app\models\helper\PasswordList::$list)) {
+            $this->addError($attribute, 'Password terlalu umum atau tidak diperbolehkan.');
+        }
     }
 
     /**

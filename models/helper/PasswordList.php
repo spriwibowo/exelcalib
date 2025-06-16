@@ -13,7 +13,7 @@ namespace app\models\helper;
  */
 class PasswordList {
     //put your code here
-static $default = "_A5p4kD2023_";
+static $default = "_Kalibrasi2025_";
     
     static $list = array( 
     "123456",
