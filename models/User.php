@@ -31,6 +31,8 @@ class User extends ActiveRecord implements IdentityInterface {
             ['email', 'email'],
             ['username', 'string', 'min' => 2, 'max' => 255],
             ['password', 'string', 'min' => 4],
+            ['password', 'required', 'on' => 'create'],
+            ['password', 'safe', 'on' => 'update'], // password tidak wajib saat update
             [['full_name', 'access_token', 'password', 'password_hash', 'reset_token'], 'string'],
             [['tipe', 'entity_id', 'faskes', 'isDeleted','expire_at'], 'integer']
         ];
@@ -47,11 +49,15 @@ class User extends ActiveRecord implements IdentityInterface {
             $this->password =  $p;
         }
 
+        if (!$this->isNewRecord && empty($this->password)) {
+            // Jangan ubah password
+            unset($this->password);
+        }
+
 
         if (isset($this->password)) {
             $this->setPassword($this->password);
         }
-
 
         return parent::beforeSave($insert);
     }

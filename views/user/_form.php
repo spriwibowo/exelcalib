@@ -27,6 +27,12 @@ use app\models\User;
 
     <?= $form->field($model, 'tipe')->dropDownList(User::ListTipe(), ['prompt' => 'Pilih Tipe']) ?>
 
+    <?php if ($model->isNewRecord): ?>
+        <?= $form->field($model, 'password')->textInput(['maxlength' => true]) ?>
+    <?php else: ?>
+        <?= $form->field($model, 'password')->textInput(['maxlength' => true])->hint('Biarkan kosong jika tidak ingin mengubah password') ?>
+    <?php endif; ?>   
+
     <div class="form-group row mt-3">
         <div class="offset-sm-3 col-sm-6">
             <?= Html::submitButton('Save', ['class' => 'btn btn-primary']) ?>
