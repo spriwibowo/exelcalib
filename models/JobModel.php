@@ -168,8 +168,8 @@ class JobModel extends \yii\db\ActiveRecord
                 $result['message'] = 'Format File Tidak Sesuai';
                 return $result;
             }
-
-            $fileName = uniqid('job_') . '.' . $uploadedFile->extension;
+            $timestamp = date('Ymd_His'); // Format: 20250614_142530
+            $fileName = uniqid('job_'.$timestamp.'_') . '.' . $uploadedFile->extension;
             $relativePath = 'uploads/jobs/' . $fileName;
             $fullPath = Yii::getAlias('@webroot/' . $relativePath);
 

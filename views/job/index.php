@@ -57,10 +57,27 @@ $this->params['breadcrumbs'][] = $this->title;
                 //'tipe',
                 //'id_resume',
                 [
-                    'class' => ActionColumn::className(),
+                    'class' => \yii\grid\ActionColumn::class,
+                    'template' => '{view} {update} {delete} {download}',
                     'urlCreator' => function ($action, JobModel $model, $key, $index, $column) {
                         return Url::toRoute([$action, 'id_job' => $model->id_job]);
-                     }
+                    },
+                    'buttons' => [
+                        'download' => function ($url, $model, $key) {
+                            $url = Url::to("@web/" . $model->file, true);
+                            return Html::a(
+                                '<i class="fa fa-download"></i>',
+                                $url,
+                                [
+                                    'class' => '',
+                                    'download' => basename($model->file),
+                                    'target' => '_blank',
+                                    'title' => 'Download file',
+                                    'data-pjax' => '0',
+                                ]
+                            );
+                        },
+                    ],
                 ],
             ],
             'pager' => [
