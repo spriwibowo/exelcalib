@@ -143,6 +143,36 @@ class SiteController extends Controller
         return ['items' => $data];
     }
 
+    public function actionProfile()
+    {
+        $id = Yii::$app->user->id;
+        $model = User::findOne($id);
+
+        if (!$model) {
+            throw new NotFoundHttpException('Data pengguna tidak ditemukan.');
+        }
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return \yii\bootstrap5\ActiveForm::validate($model);
+        }
+
+        // Atur skenario agar validasi password opsional saat update
+        $model->scenario = 'update';
+
+        if ($model->load(Yii::$app->request->post())) {
+           
+            if (!$model->hasErrors() && $model->save(false)) {
+                Yii::$app->session->setFlash('success', 'Profil berhasil diperbarui.');
+                return $this->redirect(['profile']);
+            }
+        }
+
+        return $this->render('profile', [
+            'model' => $model,
+        ]);
+    }
+
     // public function actionCreateadmin(){
     //     \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     //     $response = [
