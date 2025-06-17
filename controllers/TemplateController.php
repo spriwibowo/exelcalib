@@ -27,13 +27,18 @@ class TemplateController extends Controller
             [
                 'access' => [
                     'class' => AccessControl::class,
-                    
                     'rules' => [
                         [
                             'allow' => true,
-                            'roles' => ['@'], // hanya untuk user yang login
+                            'roles' => ['@'],
+                            'matchCallback' => function ($rule, $action) {
+                                return in_array(Yii::$app->user->identity->tipe, array(1,2));
+                            },
                         ],
                     ],
+                    'denyCallback' => function () {
+                        throw new \yii\web\ForbiddenHttpException('Anda tidak memiliki izin untuk mengakses halaman ini.');
+                    },
                 ],
                 'verbs' => [
                     'class' => VerbFilter::className(),
@@ -114,7 +119,8 @@ class TemplateController extends Controller
                 if ($uploadedFile) {
                     $isExcel = HelperData::IsExcelFile($uploadedFile);
                     if($isExcel){
-                        $fileName = uniqid('template_') . '.' . $uploadedFile->extension;
+                        $timestamp = date('Ymd_His'); // Format: 20250614_142530
+                        $fileName = $model->nama . '_' . $timestamp . '.' . $uploadedFile->extension;
                         $relativePath = 'uploads/templates/' . $fileName;
                         $fullPath = Yii::getAlias('@webroot/' . $relativePath);
 
@@ -190,7 +196,8 @@ class TemplateController extends Controller
 
                 $isExcel = HelperData::IsExcelFile($uploadedFile);
                     if($isExcel){
-                        $fileName = uniqid('template_') . '.' . $uploadedFile->extension;
+                        $timestamp = date('Ymd_His'); // Format: 20250614_142530
+                        $fileName = $model->nama . '_' . $timestamp . '.' . $uploadedFile->extension;
                         $relativePath = 'uploads/templates/' . $fileName;
                         $fullPath = Yii::getAlias('@webroot/' . $relativePath);
 

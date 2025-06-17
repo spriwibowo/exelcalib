@@ -42,6 +42,7 @@ class TemplateModel extends \yii\db\ActiveRecord
             [['id_alat', 'nama', 'file', 'extra', 'laik_sheet', 'laik_row', 'ketidakpastian_sheet', 'ketidakpastian_row', 'keterangan'], 'default', 'value' => null],
             [['status'], 'default', 'value' => 1],
             [['id_alat', 'status'], 'integer'],
+            [['nama'], 'unique'],
             [['uploadfile'], 'file', 
                 'skipOnEmpty' => function ($model) {
                     return !$model->isNewRecord;

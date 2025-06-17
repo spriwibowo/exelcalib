@@ -261,10 +261,20 @@ $this->beginPage();
 
         </div>
         <a href="<?= Url::to(['/site/index']) ?>"><i class="fas fa-home me-2"></i> <span class="sidebar-text">Dashboard</span></a>
-        <a href="<?= Url::to(['/user/index']) ?>"><i class="fas fa-users me-2"></i> <span class="sidebar-text">Users</span></a>
-        <a href="<?= Url::to(['/template/index']) ?>"><i class="fas fa-book me-2"></i> <span class="sidebar-text">Template MK</span></a>
+        <!-- only admin -->
+        <?php if(in_array(Yii::$app->user->identity->tipe, array(1))):?>
+            <a href="<?= Url::to(['/user/index']) ?>"><i class="fas fa-users me-2"></i> <span class="sidebar-text">Users</span></a>
+        <?php endif;?>
+
+        <!-- only admin | supervisor -->
+        <?php if(in_array(Yii::$app->user->identity->tipe, array(1,2))):?>
+            <a href="<?= Url::to(['/template/index']) ?>"><i class="fas fa-book me-2"></i> <span class="sidebar-text">Template MK</span></a>
+        <?php endif;?>
+        <a href="<?= Url::to(['/pustaka/index']) ?>"><i class="fas fa-download me-2"></i> <span class="sidebar-text">Pustaka MK</span></a>
+            
         <a href="<?= Url::to(['/resume/index']) ?>"><i class="fas fa-file me-2"></i> <span class="sidebar-text">Resume Kegiatan</span></a>
         <a href="<?= Url::to(['/job/index']) ?>"><i class="fas fa-clipboard me-2"></i> <span class="sidebar-text">Kegiatan Kalibrasi</span></a>
+        
         <a href="<?= Url::to(['/site/profile']) ?>"><i class="fas fa-cogs me-2"></i> <span class="sidebar-text">Update Profile</span></a>
     </div>
 
