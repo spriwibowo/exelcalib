@@ -54,16 +54,16 @@ class PustakaController extends Controller
     {
         $dataProvider = new ActiveDataProvider([
             'query' => TemplateModel::find(),
-            /*
+            
             'pagination' => [
-                'pageSize' => 50
+                'pageSize' => 20
             ],
             'sort' => [
                 'defaultOrder' => [
                     'id_template' => SORT_DESC,
                 ]
             ],
-            */
+            
         ]);
 
         return $this->render('index', [

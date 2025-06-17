@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\widgets\LinkPager;
 
 /** @var yii\web\View $this */
 /** @var yii\data\ActiveDataProvider $dataProvider */
@@ -21,51 +22,66 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            // 'id_template',
-            // 'id_alat',
-            [
-                'attribute' => 'id_alat',
-                'value' => 'alat_text',
-                'label' => 'Nama Alat',
+    <?=  GridView::widget([
+            'dataProvider' => $dataProvider,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+    
+                // 'id_template',
+                // 'id_alat',
+                [
+                    'attribute' => 'id_alat',
+                    'value' => 'alat_text',
+                    'label' => 'Nama Alat',
+                ],
+                'nama',
+                [
+                    'attribute' => 'file',
+                    'label' => 'File',
+                    'format' => 'raw',
+                    'value' => function ($model) {
+                        return Html::a(
+                            basename($model->file),
+                            Url::to("@web/" . $model->file, true),
+                            ['target' => '_blank']
+                        );
+                    },
+                ],
+                [
+                    'attribute' => 'status',
+                    'value' => 'status_text',
+                    'label' => 'Status',
+                ],
+                // 'extra:ntext',
+                //'laik_sheet',
+                //'laik_row',
+                //'ketidakpastian_sheet',
+                //'ketidakpastian_row',
+                //'status',
+                //'keterangan:ntext',
+                [
+                    'class' => ActionColumn::className(),
+                    'urlCreator' => function ($action, TemplateModel $model, $key, $index, $column) {
+                        return Url::toRoute([$action, 'id_template' => $model->id_template]);
+                     }
+                ],
             ],
-            'nama',
-            [
-                'attribute' => 'file',
-                'label' => 'File',
-                'format' => 'raw',
-                'value' => function ($model) {
-                    return Html::a(
-                        basename($model->file),
-                        Url::to("@web/" . $model->file, true),
-                        ['target' => '_blank']
-                    );
-                },
+            'pager' => [
+                'class' => LinkPager::class,
+                'options' => ['class' => 'pagination justify-content-center'], // Bootstrap 5
+                'linkOptions' => ['class' => 'page-link'],
+                'disabledListItemSubTagOptions' => ['tag' => 'span', 'class' => 'page-link'],
+                'activePageCssClass' => 'active',
+                'disabledPageCssClass' => 'disabled',
+                'maxButtonCount' => 5,
+                'prevPageLabel' => '«',
+                'nextPageLabel' => '»',
+                'prevPageCssClass' => 'page-item',
+                'nextPageCssClass' => 'page-item',
+                'pageCssClass' => 'page-item',
             ],
-            [
-                'attribute' => 'status',
-                'value' => 'status_text',
-                'label' => 'Status',
-            ],
-            // 'extra:ntext',
-            //'laik_sheet',
-            //'laik_row',
-            //'ketidakpastian_sheet',
-            //'ketidakpastian_row',
-            //'status',
-            //'keterangan:ntext',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, TemplateModel $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id_template' => $model->id_template]);
-                 }
-            ],
-        ],
-    ]); ?>
-
+            'tableOptions' => ['class' => 'table table-striped table-bordered'], // optional
+        ]);
+    ?>
 
 </div>

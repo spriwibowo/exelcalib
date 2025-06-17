@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\widgets\LinkPager;
 
 /** @var yii\web\View $this */
 /** @var yii\data\ActiveDataProvider $dataProvider */
@@ -19,29 +20,45 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'username',
-            'email:email',
-            'full_name',
-            [
-                'attribute' => 'tipe',
-                'value' => 'tipe_text',
-                'label' => 'Tipe',
+    
+<?=  GridView::widget([
+            'dataProvider' => $dataProvider,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+    
+                'username',
+                'email:email',
+                'full_name',
+                [
+                    'attribute' => 'tipe',
+                    'value' => 'tipe_text',
+                    'label' => 'Tipe',
+                ],
+                [
+                    'class' => ActionColumn::className(),
+                    'urlCreator' => function ($action, User $model, $key, $index, $column) {
+                        return Url::toRoute([$action, 'id' => $model->id]);
+                     }
+                ],
             ],
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, User $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+            'pager' => [
+                'class' => LinkPager::class,
+                'options' => ['class' => 'pagination justify-content-center'], // Bootstrap 5
+                'linkOptions' => ['class' => 'page-link'],
+                'disabledListItemSubTagOptions' => ['tag' => 'span', 'class' => 'page-link'],
+                'activePageCssClass' => 'active',
+                'disabledPageCssClass' => 'disabled',
+                'maxButtonCount' => 5,
+                'prevPageLabel' => '«',
+                'nextPageLabel' => '»',
+                'prevPageCssClass' => 'page-item',
+                'nextPageCssClass' => 'page-item',
+                'pageCssClass' => 'page-item',
             ],
-        ],
-    ]); ?>
+            'tableOptions' => ['class' => 'table table-striped table-bordered'], // optional
+        ]);
+    ?>
+
 
 
 </div>

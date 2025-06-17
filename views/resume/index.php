@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\widgets\LinkPager;
 
 /** @var yii\web\View $this */
 /** @var yii\data\ActiveDataProvider $dataProvider */
@@ -21,50 +22,66 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            [
-                'attribute' => 'id_alat',
-                'value' => 'alat_text',
-                'label' => 'Nama Alat',
-            ],
-            'no_po',
-            'nama_po',
-            [
-                'attribute' => 'tanggal_po',
-                'format' => ['date', 'php:d-m-Y'],
-            ],
-            'jumlah',
-            'jumlah_progress',
-            //'jumlah_finish',
-            //'jumlah_laik',
-            //'jumlah_tidak',
-            //'extra:ntext',
-            //'id_po',
-            [
-                'class' => ActionColumn::className(),
-                'template' => '{kalibrasi} {view} {update} {delete} ', // tambahkan nama action di template
-                'urlCreator' => function ($action, ResumeModel $model, $key, $index, $column) {
-                    if ($action === 'kalibrasi') {
-                        return Url::toRoute(['job/create', 'id' => $model->id_resume]);
-                    }
-                    return Url::toRoute([$action, 'id_resume' => $model->id_resume]);
-                },
-                'buttons' => [
-                    'kalibrasi' => function ($url, $model, $key) {
-                        return Html::a('<i class="fa fa-plus"></i>', $url, [
-                            'title' => 'Tambah Kegiatan Kalibrasi',
-                            'data-pjax' => '0',
-                            'class' => 'btn btn-primary btn-sm'
-                        ]);
-                    },
+<?=  GridView::widget([
+            'dataProvider' => $dataProvider,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'attribute' => 'id_alat',
+                    'value' => 'alat_text',
+                    'label' => 'Nama Alat',
                 ],
-            ]
-            ,
-        ],
-    ]); ?>
+                'no_po',
+                'nama_po',
+                [
+                    'attribute' => 'tanggal_po',
+                    'format' => ['date', 'php:d-m-Y'],
+                ],
+                'jumlah',
+                'jumlah_progress',
+                //'jumlah_finish',
+                //'jumlah_laik',
+                //'jumlah_tidak',
+                //'extra:ntext',
+                //'id_po',
+                [
+                    'class' => ActionColumn::className(),
+                    'template' => '{kalibrasi} {view} {update} {delete} ', // tambahkan nama action di template
+                    'urlCreator' => function ($action, ResumeModel $model, $key, $index, $column) {
+                        if ($action === 'kalibrasi') {
+                            return Url::toRoute(['job/create', 'id' => $model->id_resume]);
+                        }
+                        return Url::toRoute([$action, 'id_resume' => $model->id_resume]);
+                    },
+                    'buttons' => [
+                        'kalibrasi' => function ($url, $model, $key) {
+                            return Html::a('<i class="fa fa-plus"></i>', $url, [
+                                'title' => 'Tambah Kegiatan Kalibrasi',
+                                'data-pjax' => '0',
+                                'class' => 'btn btn-primary btn-sm'
+                            ]);
+                        },
+                    ],
+                ]
+                ,
+            ],
+            'pager' => [
+                'class' => LinkPager::class,
+                'options' => ['class' => 'pagination justify-content-center'], // Bootstrap 5
+                'linkOptions' => ['class' => 'page-link'],
+                'disabledListItemSubTagOptions' => ['tag' => 'span', 'class' => 'page-link'],
+                'activePageCssClass' => 'active',
+                'disabledPageCssClass' => 'disabled',
+                'maxButtonCount' => 5,
+                'prevPageLabel' => '«',
+                'nextPageLabel' => '»',
+                'prevPageCssClass' => 'page-item',
+                'nextPageCssClass' => 'page-item',
+                'pageCssClass' => 'page-item',
+            ],
+            'tableOptions' => ['class' => 'table table-striped table-bordered'], // optional
+        ]);
+    ?>
 
 
 </div>

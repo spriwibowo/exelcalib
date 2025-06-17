@@ -52,16 +52,16 @@ class ResumeController extends Controller
     {
         $dataProvider = new ActiveDataProvider([
             'query' => ResumeModel::find(),
-            /*
+            
             'pagination' => [
-                'pageSize' => 50
+                'pageSize' => 20
             ],
             'sort' => [
                 'defaultOrder' => [
                     'id_resume' => SORT_DESC,
                 ]
             ],
-            */
+            
         ]);
 
         return $this->render('index', [
