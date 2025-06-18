@@ -199,7 +199,7 @@ class JobModel extends \yii\db\ActiveRecord
                     $value = $sheet->getCell($template->laik_row)->getCalculatedValue();
                     $this->laik = strtoupper($value);
 
-                    if(in_array($this->laik,array('LAIK','LAYAK','LAIK PAKAI'))){
+                    if(!empty($this->laik)){
                         $this->stt_laik = 1;
                     }else{
                         $this->stt_laik = 0;

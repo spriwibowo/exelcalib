@@ -15,10 +15,12 @@ $this->beginPage();
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <link rel="icon" href="<?= Yii::getAlias('@web') ?>/favicon.ico" type="image/x-icon">
 
     <?php $this->head() ?>
+    
 
     <style>
         .select2-selection--single.form-control {
@@ -271,7 +273,7 @@ $this->beginPage();
             <a href="<?= Url::to(['/template/index']) ?>"><i class="fas fa-book me-2"></i> <span class="sidebar-text">Template MK</span></a>
         <?php endif;?>
         <a href="<?= Url::to(['/pustaka/index']) ?>"><i class="fas fa-download me-2"></i> <span class="sidebar-text">Pustaka MK</span></a>
-            
+
         <a href="<?= Url::to(['/resume/index']) ?>"><i class="fas fa-file me-2"></i> <span class="sidebar-text">Resume Kegiatan</span></a>
         <a href="<?= Url::to(['/job/index']) ?>"><i class="fas fa-clipboard me-2"></i> <span class="sidebar-text">Kegiatan Kalibrasi</span></a>
         

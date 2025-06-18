@@ -46,26 +46,31 @@ if ($model->id_alat) {
 
     <?= $form->field($model, 'nama')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'uploadfile')->fileInput([
-        'accept' => '.xls,.xlsx',
-        'id' => 'file-excel'
-    ])->label('File Excel' . (!$model->isNewRecord && $model->file ? ' (biarkan kosong jika tidak diganti)' : '')) ?>
-
-    <?php if (!$model->isNewRecord && $model->file): ?>
-        <div class="form-group row">
-            <div class="offset-sm-3 col-sm-6">
-                <p class="form-text">
-                    File saat ini: 
-                    <a href="<?= Url::to('@web/' . $model->file, true) ?>" target="_blank">
-                        <?= basename($model->file) ?>
-                    </a>
-                </p>
+    <div class="form-group row">
+        <label for="file-excel" class="col-sm-3 col-form-label">
+            File Excel <?= !$model->isNewRecord ? '(biarkan kosong jika tidak diganti)' : '' ?>
+        </label>
+        <div class="col-sm-6">
+            <input type="file" name="uploadfile" id="file-excel" class="form-control" accept=".xls,.xlsx">
+            <?= $form->field($model, 'file', ['template' => '{input}'])->hiddenInput(['id' => 'file-path']) ?>
+            <div id="upload-status" class="form-text small mt-1">
+                <?= $model->file ? 'File lama: ' . basename($model->file) : '' ?>
             </div>
         </div>
-    <?php endif; ?>
+        <div class="col-sm-3">
+            <!-- tempat error bisa ditaruh manual jika mau -->
+        </div>
+    </div>
 
 
-    <?= $form->field($model, 'laik_sheet')->textInput(['maxlength' => true]) ?>
+    <?php 
+    $listSheet = [];
+    if(!empty($model->laik_sheet)){
+        $listSheet[] = $model->laik_sheet;
+    }
+    ?>
+
+    <?= $form->field($model, 'laik_sheet')->dropDownList($listSheet,['prompt' => 'Pilih Sheet','id'=>'sheets','required'=>true]) ?>
     <?= $form->field($model, 'laik_row')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'status')->dropDownList(
@@ -87,7 +92,48 @@ if ($model->id_alat) {
 
 <?php
 $searchAlat = Url::to(['site/searchalat']);
+$uploadExcel = Url::to(['template/upload']);
 $js = <<<JS
+$('#file-excel').on('change', function () {
+    let file = this.files[0];
+    let formData = new FormData();
+    formData.append('uploadfile', file);
+    formData.append('_csrf', yii.getCsrfToken());
+
+    $('#upload-status').text('Uploading...');
+
+    $.ajax({
+        url: '{$uploadExcel}',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (res) {
+            if (res.status) {
+                let data = res.data;
+                $('#file-path').val(data.filepath); // set ke hidden input
+                $('#upload-status').text('Uploaded: ' + data.filepath);
+
+                // Reset dan isi ulang dropdown #sheets
+                let sheets = $('#sheets');
+                sheets.empty(); // kosongkan dulu
+
+                sheets.append('<option value="">Pilih Sheet</option>'); // tambahkan prompt
+
+                data.sheets.forEach(function(sheet) {
+                    sheets.append('<option value="'+sheet.name+'">'+sheet.name+'</option>');
+                });
+
+            } else {
+                $('#upload-status').text('Gagal upload: ' + res.message);
+            }
+        },
+        error: function () {
+            $('#upload-status').text('Upload error: server tidak merespon');
+        }
+    });
+});
+
 $('#id_alat').select2({
     placeholder: "Cari Alat...",
     allowClear: true,
