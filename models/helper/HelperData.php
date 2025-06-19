@@ -200,7 +200,9 @@ class HelperData {
         $fileExtension = strtolower($uploadedFile->extension);
         $fileMimeType = $uploadedFile->type;
 
-        if (in_array($fileExtension, $allowedExtensions) && in_array($fileMimeType, $allowedMimeTypes)) {
+        if (in_array($fileExtension, $allowedExtensions) 
+            // && in_array($fileMimeType, $allowedMimeTypes)
+        ) {
             return true;
         }
 
