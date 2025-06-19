@@ -23,6 +23,7 @@ class TemplateModel extends \yii\db\ActiveRecord
 {
 
     public $uploadfile;
+    public $kolom,$baris;
 
     /**
      * {@inheritdoc}
@@ -38,10 +39,11 @@ class TemplateModel extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_alat', 'nama','laik_sheet','laik_row'], 'required'],
+            [['id_alat', 'nama','laik_sheet','kolom','baris'], 'required'],
             [['id_alat', 'nama', 'file', 'extra', 'laik_sheet', 'laik_row', 'ketidakpastian_sheet', 'ketidakpastian_row', 'keterangan'], 'default', 'value' => null],
             [['status'], 'default', 'value' => 1],
             [['id_alat', 'status'], 'integer'],
+            [['baris'], 'integer', 'min' => 1,'max'=>300],
             [['nama'], 'unique'],
             [['uploadfile'], 'file', 
                 'skipOnEmpty' => function ($model) {
@@ -66,12 +68,14 @@ class TemplateModel extends \yii\db\ActiveRecord
             'nama' => 'Nama Template',
             'file' => 'File',
             'extra' => 'Extra',
-            'laik_sheet' => 'Laik Sheet',
+            'laik_sheet' => 'Sheet Laik',
             'laik_row' => 'Laik Cell & Row',
             'ketidakpastian_sheet' => 'Ketidakpastian Sheet',
             'ketidakpastian_row' => 'Ketidakpastian Row',
             'status' => 'Status',
             'keterangan' => 'Keterangan',
+            'baris' => 'Baris Laik',
+            'kolom' => 'Kolom Laik',
         ];
     }
 
@@ -164,6 +168,28 @@ class TemplateModel extends \yii\db\ActiveRecord
         }
         
         return $data;
+    }
+
+    public function splitLaikRow(){
+        if (preg_match('/^([A-Za-z]+)(\d+)$/', $this->laik_row, $matches)) {
+            $huruf = $matches[1]; // 'A'
+            $angka = $matches[2]; // '100'
+            $this->kolom = $huruf;
+            $this->baris = $angka;
+        }
+    }
+
+    public function setLaikRow(){
+        $this->laik_row = $this->kolom.$this->baris;
+    }
+
+    public static function ListKolom(){
+        $list = [];
+        foreach (range('A', 'Z') as $char) {
+            $list[$char]=$char;
+        }
+
+        return $list;
     }
 
 }

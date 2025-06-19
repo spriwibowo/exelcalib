@@ -115,6 +115,7 @@ class TemplateController extends Controller
             }
 
             if ($model->validate()) {
+                $model->setLaikRow();
                 $valid_file = true;
                 // $valid_file = false;
                 // if ($uploadedFile) {
@@ -202,6 +203,7 @@ class TemplateController extends Controller
 
         if (Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post());
+            $model->setLaikRow();
             $valid_file = true;
 
             // $uploadedFile = UploadedFile::getInstance($model, 'uploadfile');
@@ -271,6 +273,8 @@ class TemplateController extends Controller
                 return $this->redirect(['index']);
             }
         }
+
+        $model->splitLaikRow();
 
         return $this->render('update', [
             'model' => $model,

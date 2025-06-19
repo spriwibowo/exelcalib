@@ -66,12 +66,18 @@ if ($model->id_alat) {
     <?php 
     $listSheet = [];
     if(!empty($model->laik_sheet)){
-        $listSheet[] = $model->laik_sheet;
+        $listSheet[$model->laik_sheet] = $model->laik_sheet;
     }
     ?>
 
     <?= $form->field($model, 'laik_sheet')->dropDownList($listSheet,['prompt' => 'Pilih Sheet','id'=>'sheets','required'=>true]) ?>
-    <?= $form->field($model, 'laik_row')->textInput(['maxlength' => true]) ?>
+    
+    <?= $form->field($model, 'kolom')->dropDownList(TemplateModel::ListKolom(),['prompt' => 'Pilih Kolom','id'=>'kolom','required'=>true]) ?>
+    <?= $form->field($model, 'baris')->textInput([
+        'type' => 'number',
+        'min' => 1,
+        'max' => 300
+    ]) ?>
 
     <?= $form->field($model, 'status')->dropDownList(
         TemplateModel::ListStatus(), 
@@ -133,6 +139,13 @@ $('#file-excel').on('change', function () {
         }
     });
 });
+
+$('#kolom').select2().on('select2:open', function () {
+    $('.select2-search__field').addClass('form-control');
+});
+
+// Tambah class form-control ke elemen select2
+$('#kolom').next('.select2-container').find('.select2-selection--single').addClass('form-control');
 
 $('#id_alat').select2({
     placeholder: "Cari Alat...",
