@@ -174,7 +174,7 @@ class JobModel extends \yii\db\ActiveRecord
             $fullPath = Yii::getAlias('@webroot/' . $relativePath);
 
             if (!is_dir(dirname($fullPath))) {
-                mkdir(dirname($fullPath), 0775, true);
+                mkdir(dirname($fullPath), 0777, true);
             }
 
             if ($uploadedFile->saveAs($fullPath)) {

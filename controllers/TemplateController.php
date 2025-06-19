@@ -345,13 +345,16 @@ class TemplateController extends Controller
                         $fullPath = Yii::getAlias('@webroot/' . $relativePath);
 
                         if (!is_dir(dirname($fullPath))) {
-                            mkdir(dirname($fullPath), 0775, true);
+                            mkdir(dirname($fullPath), 0777, true);
                         }
 
                         if ($uploadedFile->saveAs($fullPath)) {
                             
                             try {
-                                $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($fullPath);
+                                $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($fullPath);
+                                $reader->setReadDataOnly(true); // tidak memuat style, hanya data
+                                $spreadsheet = $reader->load($fullPath);
+                                
                                 $sheetNames = $spreadsheet->getSheetNames();
 
                                 foreach($sheetNames as $name){
@@ -361,13 +364,14 @@ class TemplateController extends Controller
                                 }
 
                                 $valid_file = true;
+                                $message = "File berhasil diunggah.";
                                 
                             } catch (\Throwable $e) {
                                 $message = "Gagal membaca file Excel: " . $e->getMessage().' <br/>File Excel tidak boleh diproteksi dengan password.';
                                 
                             }
                         } else {
-                            $message = "Gagal menyimpan file.";
+                            $message = "Gagal menyimpan file. ".$uploadedFile->error;
                         }
                     }else{
                         $message = "Format File Tidak Sesuai.";
