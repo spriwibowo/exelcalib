@@ -64,8 +64,9 @@ if ($model->id_alat) {
 
 
     <?php 
-    $listSheet = [];
-    if(!empty($model->laik_sheet)){
+    $listSheet = $model->listSheets();
+
+    if(!empty($model->laik_sheet) && !isset($listSheet[$model->laik_sheet])){
         $listSheet[$model->laik_sheet] = $model->laik_sheet;
     }
     ?>
@@ -84,6 +85,8 @@ if ($model->id_alat) {
         ['prompt' => 'Pilih Status']) ?>
 
     <?= $form->field($model, 'keterangan')->textarea(['rows' => 6]) ?>
+
+    <?= Html::hiddenInput('sheet_list_json', $model->sheet_list_json, ['id' => 'sheet-list-json']) ?>
 
     <div class="form-group row">
         <div class="offset-sm-3 col-sm-6">
@@ -129,6 +132,9 @@ $('#file-excel').on('change', function () {
                 data.sheets.forEach(function(sheet) {
                     sheets.append('<option value="'+sheet.name+'">'+sheet.name+'</option>');
                 });
+
+                const sheetNames = data.sheets.map(s => s.name);
+                $('#sheet-list-json').val(JSON.stringify(sheetNames));
 
             } else {
                 $('#upload-status').text('Gagal upload: ' + res.message);

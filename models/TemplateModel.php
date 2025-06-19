@@ -24,6 +24,7 @@ class TemplateModel extends \yii\db\ActiveRecord
 
     public $uploadfile;
     public $kolom,$baris;
+    public $sheet_list_json;
 
     /**
      * {@inheritdoc}
@@ -189,6 +190,34 @@ class TemplateModel extends \yii\db\ActiveRecord
             $list[$char]=$char;
         }
 
+        return $list;
+    }
+    public function getExtra_data(){
+        $jsonString = $this->extra; // misalnya dari database
+
+        if (!empty($jsonString)) {
+            $extra = json_decode($jsonString, true);
+        } else {
+            $extra = [];
+        }
+
+        return $extra;
+
+    }
+
+    public function listSheets(){
+        $extra = $this->extra_data;
+        $list = [];
+        if(!empty($extra['sheet_list'])){
+            $this->sheet_list_json = $extra['sheet_list'];
+            $dt = json_decode($extra['sheet_list'],true);
+            if(!empty($dt)){
+                foreach($dt as $sheet){
+                    $list[$sheet] = $sheet;
+                }
+            }
+            
+        }
         return $list;
     }
 

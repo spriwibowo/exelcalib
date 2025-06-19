@@ -116,44 +116,13 @@ class TemplateController extends Controller
 
             if ($model->validate()) {
                 $model->setLaikRow();
+
+                $sheet_list_json = $_POST['sheet_list_json'];
+                $extra = $model->extra_data;
+                $extra['sheet_list'] = $sheet_list_json;
+                $model->extra = json_encode($extra);
+
                 $valid_file = true;
-                // $valid_file = false;
-                // if ($uploadedFile) {
-                //     $isExcel = HelperData::IsExcelFile($uploadedFile);
-                //     if($isExcel){
-                //         $timestamp = date('Ymd_His'); // Format: 20250614_142530
-                //         $fileName = $model->nama . '_' . $timestamp . '.' . $uploadedFile->extension;
-                //         $relativePath = 'uploads/templates/' . $fileName;
-                //         $fullPath = Yii::getAlias('@webroot/' . $relativePath);
-
-                //         if (!is_dir(dirname($fullPath))) {
-                //             mkdir(dirname($fullPath), 0775, true);
-                //         }
-
-                //         if ($uploadedFile->saveAs($fullPath)) {
-                //             $model->file = $relativePath;
-
-                //             // Baca file Excel
-                //             try {
-                //                 $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($fullPath);
-                //                 $sheet = $spreadsheet->getSheetByName($model->laik_sheet);
-                //                 if ($sheet) {
-                //                     $value = $sheet->getCell($model->laik_row)->getValue();
-                //                     Yii::$app->session->setFlash('success', "Data berhasil disimpan");
-                //                     $valid_file = true;
-                //                 } else {
-                //                     Yii::$app->session->setFlash('warning', "Sheet '{$model->laik_sheet}' tidak ditemukan.");
-                //                 }
-                //             } catch (\Throwable $e) {
-                //                 Yii::$app->session->setFlash('error', "Gagal membaca file Excel: " . $e->getMessage().' <br/>File Excel tidak boleh diproteksi dengan password.');
-                //             }
-                //         } else {
-                //             Yii::$app->session->setFlash('error', "Gagal menyimpan file.");
-                //         }
-                //     }else{
-                //         Yii::$app->session->setFlash('error', "Format File Tidak Sesuai.");
-                //     }
-                // }
 
                 $tempPath = Yii::getAlias('@webroot/' . $model->file);
                 $newFileName = $model->nama . '_' . date('Ymd_His') . '.' . pathinfo($tempPath, PATHINFO_EXTENSION);
@@ -204,53 +173,14 @@ class TemplateController extends Controller
         if (Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post());
             $model->setLaikRow();
+
+            $sheet_list_json = $_POST['sheet_list_json'];
+            $extra = $model->extra_data;
+            $extra['sheet_list'] = $sheet_list_json;
+            $model->extra = json_encode($extra);
+
             $valid_file = true;
 
-            // $uploadedFile = UploadedFile::getInstance($model, 'uploadfile');
-
-            // if ($uploadedFile) {
-            //     $valid_file = false;
-
-            //     $isExcel = HelperData::IsExcelFile($uploadedFile);
-            //         if($isExcel){
-            //             $timestamp = date('Ymd_His'); // Format: 20250614_142530
-            //             $fileName = $model->nama . '_' . $timestamp . '.' . $uploadedFile->extension;
-            //             $relativePath = 'uploads/templates/' . $fileName;
-            //             $fullPath = Yii::getAlias('@webroot/' . $relativePath);
-
-            //             if (!is_dir(dirname($fullPath))) {
-            //                 mkdir(dirname($fullPath), 0775, true);
-            //             }
-
-            //             if ($uploadedFile->saveAs($fullPath)) {
-            //                 $model->file = $relativePath;
-
-            //                 // Proses Excel jika file baru diunggah
-            //                 try {
-            //                     $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($fullPath);
-            //                     $sheet = $spreadsheet->getSheetByName($model->laik_sheet);
-            //                     if ($sheet) {
-            //                         $value = $sheet->getCell($model->laik_row)->getValue();
-            //                         Yii::$app->session->setFlash('success', "Data berhasil disimpan dan File berhasil diganti");
-            //                         $valid_file = true;
-            //                     } else {
-            //                         Yii::$app->session->setFlash('warning', "Sheet '{$model->laik_sheet}' tidak ditemukan.");
-            //                     }
-            //                 } catch (\Throwable $e) {
-            //                     Yii::$app->session->setFlash('error', "Gagal membaca file Excel: " . $e->getMessage().' <br/>File Excel tidak boleh diproteksi dengan password.');
-            //                 }
-            //             } else {
-            //                 Yii::$app->session->setFlash('error', "Gagal menyimpan file.");
-            //             }
-            //         }else{
-            //             Yii::$app->session->setFlash('error', "Format File Tidak Sesuai.");
-            //         }
-            // } else {
-
-            //     // Tidak ada file baru diupload, gunakan yang lama
-            //     $valid_file = true;
-            //     $model->file = $oldFilePath;
-            // }
 
             if($model->file != $oldFilePath){
                 $tempPath = Yii::getAlias('@webroot/' . $model->file);
