@@ -7,7 +7,7 @@ use app\models\TemplateModel;
 use yii\jui\DatePicker;
 
 /** @var yii\web\View $this */
-/** @var app\models\JobModel $model */
+/** @var app\models\JobOldModel $model */
 /** @var yii\widgets\ActiveForm $form */
 
 $alatText = ''; // default

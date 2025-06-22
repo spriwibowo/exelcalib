@@ -30,7 +30,7 @@ use app\models\helper\HelperData;
  * @property string|null $tipe
  * @property int|null $id_resume
  */
-class JobModel extends \yii\db\ActiveRecord
+class JobOldModel extends \yii\db\ActiveRecord
 {
 
     public $uploadfile;
@@ -40,7 +40,7 @@ class JobModel extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'job';
+        return 'job_old';
     }
 
     /**
@@ -169,7 +169,7 @@ class JobModel extends \yii\db\ActiveRecord
                 return $result;
             }
             $timestamp = date('Ymd_His'); // Format: 20250614_142530
-            $fileName = uniqid('job_'.$timestamp.'_') . '.' . $uploadedFile->extension;
+            $fileName = uniqid('jobo_'.$timestamp.'_') . '.' . $uploadedFile->extension;
             $relativePath = 'uploads/jobs/' . $fileName;
             $fullPath = Yii::getAlias('@webroot/' . $relativePath);
 

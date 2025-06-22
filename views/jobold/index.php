@@ -1,6 +1,6 @@
 <?php
 
-use app\models\JobModel;
+use app\models\JobOldModel;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'class' => \yii\grid\ActionColumn::class,
                     'template' => '{view} {update} {delete} {download}',
-                    'urlCreator' => function ($action, JobModel $model, $key, $index, $column) {
+                    'urlCreator' => function ($action, JobOldModel $model, $key, $index, $column) {
                         return Url::toRoute([$action, 'id_job' => $model->id_job]);
                     },
                     'buttons' => [

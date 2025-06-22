@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'template' => '{kalibrasi} {view} {update} {delete} ', // tambahkan nama action di template
                     'urlCreator' => function ($action, ResumeModel $model, $key, $index, $column) {
                         if ($action === 'kalibrasi') {
-                            return Url::toRoute(['job/create', 'id' => $model->id_resume]);
+                            return Url::toRoute(['jobold/create', 'id' => $model->id_resume]);
                         }
                         return Url::toRoute([$action, 'id_resume' => $model->id_resume]);
                     },

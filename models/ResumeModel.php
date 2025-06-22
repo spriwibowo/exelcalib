@@ -85,7 +85,7 @@ class ResumeModel extends \yii\db\ActiveRecord
     }
 
     public function getJobs() {
-        return $this->hasMany(JobModel::class, ['id_resume' => 'id_resume']);
+        return $this->hasMany(JobOldModel::class, ['id_resume' => 'id_resume']);
     }
 
 }

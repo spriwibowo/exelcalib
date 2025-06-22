@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 
-use app\models\JobModel;
+use app\models\JobOldModel;
 use app\models\ResumeModel;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -13,9 +13,9 @@ use yii\web\UploadedFile;
 use Yii;
 
 /**
- * JobController implements the CRUD actions for JobModel model.
+ * JobController implements the CRUD actions for JobOldModel model.
  */
-class JobController extends Controller
+class JoboldController extends Controller
 {
     /**
      * @inheritDoc
@@ -46,14 +46,14 @@ class JobController extends Controller
     }
 
     /**
-     * Lists all JobModel models.
+     * Lists all JobOldModel models.
      *
      * @return string
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => JobModel::find(),
+            'query' => JobOldModel::find(),
             
             'pagination' => [
                 'pageSize' => 20
@@ -72,7 +72,7 @@ class JobController extends Controller
     }
 
     /**
-     * Displays a single JobModel model.
+     * Displays a single JobOldModel model.
      * @param int $id_job Id Job
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -85,7 +85,7 @@ class JobController extends Controller
     }
 
     /**
-     * Creates a new JobModel model.
+     * Creates a new JobOldModel model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
@@ -93,7 +93,7 @@ class JobController extends Controller
     {
 
         $resume = ResumeModel::findOne(['id_resume' => $id]);
-        $model = new JobModel();
+        $model = new JobOldModel();
         $model->preload($resume);
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
@@ -131,7 +131,7 @@ class JobController extends Controller
     }
 
     /**
-     * Updates an existing JobModel model.
+     * Updates an existing JobOldModel model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id_job Id Job
      * @return string|\yii\web\Response
@@ -176,7 +176,7 @@ class JobController extends Controller
     }
 
     /**
-     * Deletes an existing JobModel model.
+     * Deletes an existing JobOldModel model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id_job Id Job
      * @return \yii\web\Response
@@ -190,15 +190,15 @@ class JobController extends Controller
     }
 
     /**
-     * Finds the JobModel model based on its primary key value.
+     * Finds the JobOldModel model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id_job Id Job
-     * @return JobModel the loaded model
+     * @return JobOldModel the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id_job)
     {
-        if (($model = JobModel::findOne(['id_job' => $id_job])) !== null) {
+        if (($model = JobOldModel::findOne(['id_job' => $id_job])) !== null) {
             return $model;
         }
 

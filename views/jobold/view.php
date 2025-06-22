@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
-/** @var app\models\JobModel $model */
+/** @var app\models\JobOldModel $model */
 
 $this->title = $model->id_job;
 $this->params['breadcrumbs'][] = ['label' => 'Kegiatan Kalibrasi', 'url' => ['index']];

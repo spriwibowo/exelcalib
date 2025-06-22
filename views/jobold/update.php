@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
-/** @var app\models\JobModel $model */
+/** @var app\models\JobOldModel $model */
 
 $this->title = 'Update Kegiatan Kalibrasi: ' . $model->id_job;
 $this->params['breadcrumbs'][] = ['label' => 'Kegiatan Kalibrasi', 'url' => ['index']];
