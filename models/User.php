@@ -35,7 +35,7 @@ class User extends ActiveRecord implements IdentityInterface {
             ['password', 'safe', 'on' => 'update'], // password tidak wajib saat update
             ['password', 'validatePasswordList'],
             [['full_name', 'access_token', 'password', 'password_hash', 'reset_token'], 'string'],
-            [['tipe', 'entity_id', 'faskes', 'isDeleted','expire_at'], 'integer']
+            [['tipe', 'entity_id', 'faskes', 'isDeleted','expire_at','id_prof'], 'integer']
         ];
     }
 
@@ -257,7 +257,10 @@ class User extends ActiveRecord implements IdentityInterface {
         }
     }
 
-    
+    public function getProfile() {
+        return $this->hasOne(ProfileModel::class, ['id_prof' => 'id_prof'])
+                        ->from(ProfileModel::tableName() . ' profile');
+    }
     
 
 }
